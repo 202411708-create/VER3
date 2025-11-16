@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
+import { MujiIcon } from '../common/MujiIcon';
 import { ProgressBar } from '../common/ProgressBar';
 import { PieChartComponent } from './PieChart';
 import { UnaccountedModal } from './UnaccountedModal';
@@ -63,7 +64,7 @@ export const AnalysisResult: React.FC = () => {
         <ProgressBar current={3} total={5} />
 
         <div className="mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-muji-dark mb-2">
+          <h2 className="text-2xl md:text-3xl font-light text-muji-dark mb-2">
             시간 사용 분석
           </h2>
           <p className="text-muji-mid">
@@ -73,18 +74,18 @@ export const AnalysisResult: React.FC = () => {
 
         <div className="grid md:grid-cols-2 gap-6 mb-6">
           <Card padding="lg">
-            <h3 className="text-lg font-bold text-muji-dark mb-4">
+            <h3 className="text-lg font-medium text-muji-dark mb-4">
               시간 사용 비율
             </h3>
             <PieChartComponent data={chartData} />
           </Card>
 
           <Card padding="lg">
-            <h3 className="text-lg font-bold text-muji-dark mb-4">
+            <h3 className="text-lg font-medium text-muji-dark mb-4">
               전체 기록 시간
             </h3>
             <div className="text-center mb-6">
-              <div className="text-5xl font-bold text-muji-dark mb-2">
+              <div className="text-5xl font-light text-muji-dark mb-2">
                 {minutesToHours(totalMinutes)}
               </div>
               <div className="text-sm text-muji-mid">
@@ -116,13 +117,13 @@ export const AnalysisResult: React.FC = () => {
           >
             <Card padding="lg" className="mb-6 border-2 border-yellow-400 bg-yellow-50">
               <div className="flex items-start space-x-4">
-                <div className="text-4xl">⚠️</div>
+                <MujiIcon name="warning" size={40} className="text-yellow-600 flex-shrink-0" />
                 <div className="flex-1">
-                  <h3 className="text-lg font-bold text-muji-dark mb-2">
+                  <h3 className="text-lg font-medium text-muji-dark mb-2">
                     기록되지 않은 시간
                   </h3>
                   <p className="text-muji-dark mb-4">
-                    하루 중 <span className="font-bold text-xl text-red-600">{minutesToHours(unaccountedMinutes)}</span>은 기록되지 않았습니다.
+                    하루 중 <span className="font-medium text-xl text-red-600">{minutesToHours(unaccountedMinutes)}</span>은 기록되지 않았습니다.
                   </p>
                   <p className="text-sm text-muji-mid mb-4">
                     이 시간은 휴식, 멍때림, 이동시간, 또는 기억나지 않는 활동일 수 있습니다.
@@ -137,8 +138,9 @@ export const AnalysisResult: React.FC = () => {
         )}
 
         <div className="text-center">
-          <Button size="lg" onClick={() => setStep(5)}>
-            다음 →
+          <Button size="lg" onClick={() => setStep(5)} className="inline-flex items-center gap-2">
+            다음
+            <MujiIcon name="arrow-right" size={18} />
           </Button>
         </div>
       </div>

@@ -12,10 +12,10 @@ export type ActivityCategory =
 export interface TimeEntry {
   id: string;
   category: ActivityCategory;
-  startHour: number;    // 0-23
-  startMinute: number;  // 0-59
-  duration: number;     // 분 단위
-  color: string;        // Tailwind 색상 클래스명
+  startHour: number;
+  startMinute: number;
+  duration: number;
+  color: string;
 }
 
 export interface UnaccountedTime {
@@ -29,10 +29,11 @@ export interface TimeThief {
   id: string;
   label: string;
   category: 'steal' | 'ok' | 'uncategorized';
+  rank?: number | null;
 }
 
 export interface AppState {
-  currentStep: 1 | 2 | 3 | 4 | 5 | 6;
+  currentStep: 1 | 2 | 3 | 4 | 5 | 6 | 7;
   timeEntries: TimeEntry[];
   unaccountedTimes: UnaccountedTime[];
   timeThieves: TimeThief[];
