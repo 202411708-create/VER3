@@ -13,7 +13,7 @@ import { useAppStore } from '../../store/appStore';
 import type { TimeThief } from '../../types';
 
 export const TimeThiefRanking: React.FC = () => {
-  const { timeThieves, setStep, setTimeThieves } = useAppStore();
+  const { timeThieves, setStep, setTimeThieves, reset } = useAppStore();
 
   const stealThieves = timeThieves.filter((t) => t.category === 'steal');
 
@@ -98,7 +98,13 @@ export const TimeThiefRanking: React.FC = () => {
       className="min-h-screen bg-muji-bg p-4 md:p-8"
     >
       <div className="max-w-4xl mx-auto">
-        <ProgressBar current={5} total={7} />
+        <div className="flex justify-between items-center">
+          <ProgressBar current={5} total={7} />
+          <Button variant="ghost" size="sm" onClick={reset} className="flex items-center gap-1 ml-4">
+            <MujiIcon name="arrow" size={16} />
+            처음으로
+          </Button>
+        </div>
 
         <div className="mb-8 text-center">
           <h2 className="text-2xl md:text-3xl font-light text-muji-dark mb-2">

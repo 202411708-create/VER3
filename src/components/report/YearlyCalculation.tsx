@@ -14,7 +14,7 @@ import {
 } from '../../utils/timeCalculator';
 
 export const YearlyCalculation: React.FC = () => {
-  const { timeEntries, timeThieves, setStep } = useAppStore();
+  const { timeEntries, timeThieves, setStep, reset } = useAppStore();
 
   const totalMinutes = calculateTotalMinutes(timeEntries);
   const unaccountedMinutes = calculateUnaccountedMinutes(timeEntries);
@@ -34,7 +34,13 @@ export const YearlyCalculation: React.FC = () => {
       className="min-h-screen bg-muji-bg p-4 md:p-8"
     >
       <div className="max-w-4xl mx-auto">
-        <ProgressBar current={6} total={7} />
+        <div className="flex justify-between items-center mb-6">
+          <ProgressBar current={6} total={7} />
+          <Button variant="ghost" size="sm" onClick={reset} className="flex items-center gap-1 ml-4">
+            <MujiIcon name="arrow" size={16} />
+            처음으로
+          </Button>
+        </div>
 
         <motion.div
           initial={{ y: 20, opacity: 0 }}

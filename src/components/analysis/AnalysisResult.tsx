@@ -17,7 +17,7 @@ import {
 import type { ActivityCategory } from '../../types';
 
 export const AnalysisResult: React.FC = () => {
-  const { timeEntries, setStep } = useAppStore();
+  const { timeEntries, setStep, reset } = useAppStore();
   const [showModal, setShowModal] = useState(false);
 
   const totalMinutes = calculateTotalMinutes(timeEntries);
@@ -63,13 +63,19 @@ export const AnalysisResult: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         <ProgressBar current={3} total={7} />
 
-        <div className="mb-6">
-          <h2 className="text-2xl md:text-3xl font-light text-muji-dark mb-2">
-            시간 사용 분석
-          </h2>
-          <p className="text-muji-mid">
-            어제 하루를 어떻게 보냈는지 확인해보세요
-          </p>
+        <div className="flex justify-between items-start mb-6">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-light text-muji-dark mb-2">
+              시간 사용 분석
+            </h2>
+            <p className="text-muji-mid">
+              어제 하루를 어떻게 보냈는지 확인해보세요
+            </p>
+          </div>
+          <Button variant="ghost" size="sm" onClick={reset} className="flex items-center gap-1">
+            <MujiIcon name="arrow" size={16} />
+            처음으로
+          </Button>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 mb-6">

@@ -12,7 +12,7 @@ import { DropZone } from './DropZone';
 import { useAppStore } from '../../store/appStore';
 
 export const TimeThiefGame: React.FC = () => {
-  const { timeThieves, setTimeThiefCategory, setStep } = useAppStore();
+  const { timeThieves, setTimeThiefCategory, setStep, reset } = useAppStore();
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -39,13 +39,19 @@ export const TimeThiefGame: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         <ProgressBar current={4} total={7} />
 
-        <div className="mb-6">
-          <h2 className="text-2xl md:text-3xl font-light text-muji-dark mb-2">
-            시간도둑을 잡아라
-          </h2>
-          <p className="text-muji-mid">
-            나의 시간을 훔쳐가는 행동들을 분류해봅시다
-          </p>
+        <div className="flex justify-between items-start mb-6">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-light text-muji-dark mb-2">
+              시간도둑을 잡아라
+            </h2>
+            <p className="text-muji-mid">
+              나의 시간을 훔쳐가는 행동들을 분류해봅시다
+            </p>
+          </div>
+          <Button variant="ghost" size="sm" onClick={reset} className="flex items-center gap-1">
+            <MujiIcon name="arrow" size={16} />
+            처음으로
+          </Button>
         </div>
 
         <Card padding="lg" className="mb-6 bg-muji-beige border-muji-mid">
