@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
+import { MujiIcon } from '../common/MujiIcon';
 import { ProgressBar } from '../common/ProgressBar';
 import { TimeInputForm } from './TimeInputForm';
 import { TimelineCanvas } from './TimelineCanvas';
@@ -19,6 +20,8 @@ export const TimelineInput: React.FC = () => {
   const [editingEntry, setEditingEntry] = useState<TimeEntry | null>(null);
 
   const totalMinutes = calculateTotalMinutes(timeEntries);
+  const unaccountedMinutes = 1440 - totalMinutes;
+  const unaccountedHours = Math.floor(unaccountedMinutes / 60);
 
   const handleAddActivity = () => {
     setEditingEntry(null);
@@ -83,6 +86,27 @@ export const TimelineInput: React.FC = () => {
             onEditEntry={handleEditActivity}
           />
         </Card>
+
+        {unaccountedHours > 0 && timeEntries.length > 0 && (
+          <Card padding="lg" className="mb-6 bg-muji-yellow bg-opacity-20 border-muji-yellow">
+            <div className="flex items-start gap-3 mb-4">
+              <MujiIcon name="warning" size={20} className="text-muji-orange flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="text-sm font-medium text-muji-dark mb-2">
+                  기록되지 않은 시간
+                </h3>
+                <p className="text-sm text-muji-dark mb-3">
+                  하루 중 <span className="font-medium text-muji-red">{unaccountedHours}시간 {unaccountedMinutes % 60}분</span>은 기록되지 않았습니다.
+                  <br />
+                  이 시간은 휴식, 멍때림, 이동시간, 또는 기억나지 않는 활동일 수 있습니다.
+                </p>
+                <Button variant="secondary" size="sm" onClick={handleAddActivity}>
+                  추가 기록하기
+                </Button>
+              </div>
+            </div>
+          </Card>
+        )}
 
         <Card padding="lg" className="mb-6">
           <div className="flex justify-between items-center mb-4">
