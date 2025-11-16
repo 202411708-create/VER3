@@ -43,10 +43,10 @@ export const TimelineInput: React.FC = () => {
       className="min-h-screen bg-muji-bg p-4 md:p-8"
     >
       <div className="max-w-6xl mx-auto">
-        <ProgressBar current={2} total={5} />
+        <ProgressBar current={2} total={7} />
 
         <div className="mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-muji-dark mb-2">
+          <h2 className="text-2xl md:text-3xl font-light text-muji-dark mb-2">
             어제는 어떻게 보냈을까?
           </h2>
           <p className="text-muji-mid">
@@ -157,13 +157,13 @@ const ActivityListItem: React.FC<{
       <div className="flex space-x-2">
         <button
           onClick={() => onEdit(entry)}
-          className="text-sm text-blue-500 hover:text-blue-700"
+          className="text-sm text-muji-blue hover:text-muji-dark"
         >
           수정
         </button>
         <button
           onClick={() => removeTimeEntry(entry.id)}
-          className="text-sm text-red-500 hover:text-red-700"
+          className="text-sm text-muji-red hover:text-muji-dark"
         >
           삭제
         </button>

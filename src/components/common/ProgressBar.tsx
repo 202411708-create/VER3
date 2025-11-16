@@ -11,7 +11,7 @@ interface ProgressBarProps {
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   current,
   total,
-  labels = ['▶ 시작', '🕐 시간여행', '📊 분석', '🔍 시간도둑', '📋 리포트'],
+  labels = ['시작', '시간여행', '분석', '시간도둑', '순위', '1년 환산', '성찰'],
 }) => {
   return (
     <div className="w-full mb-6">
@@ -22,7 +22,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
             className={`text-xs md:text-sm ${
               index + 1 <= current
                 ? 'text-muji-dark font-medium'
-                : 'text-gray-400'
+                : 'text-muji-light'
             }`}
           >
             {label}

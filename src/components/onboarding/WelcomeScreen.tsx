@@ -44,9 +44,9 @@ export const WelcomeScreen: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Card padding="lg" className="h-full border-l-4 border-l-blue-500">
+            <Card padding="lg" className="h-full border-l-4 border-l-muji-blue">
               <div className="flex items-center gap-2 mb-2">
-                <MujiIcon name="clock" size={20} className="text-blue-500" />
+                <MujiIcon name="clock" size={20} className="text-muji-blue" />
                 <h3 className="text-lg font-medium text-muji-dark">
                   미션 1: 시간여행 타임라인
                 </h3>
@@ -62,9 +62,9 @@ export const WelcomeScreen: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <Card padding="lg" className="h-full border-l-4 border-l-pink-500">
+            <Card padding="lg" className="h-full border-l-4 border-l-muji-pink">
               <div className="flex items-center gap-2 mb-2">
-                <MujiIcon name="search" size={20} className="text-pink-500" />
+                <MujiIcon name="search" size={20} className="text-muji-pink" />
                 <h3 className="text-lg font-medium text-muji-dark">
                   미션 2: 시간도둑 찾기
                 </h3>

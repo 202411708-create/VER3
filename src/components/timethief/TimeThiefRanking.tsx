@@ -1,6 +1,6 @@
 // src/components/timethief/TimeThiefRanking.tsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import type { DragEndEvent } from '@dnd-kit/core';
@@ -18,7 +18,11 @@ export const TimeThiefRanking: React.FC = () => {
   const stealThieves = timeThieves.filter((t) => t.category === 'steal');
 
   const [ranked, setRanked] = useState<(TimeThief | null)[]>([null, null, null]);
-  const [unranked, setUnranked] = useState<TimeThief[]>(stealThieves);
+  const [unranked, setUnranked] = useState<TimeThief[]>([]);
+
+  useEffect(() => {
+    setUnranked(stealThieves);
+  }, [stealThieves.length]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -33,7 +37,9 @@ export const TimeThiefRanking: React.FC = () => {
 
     if (!over) return;
 
-    const draggedThief = [...unranked, ...ranked.filter(Boolean)].find((t) => t?.id === active.id);
+    const allThieves = [...unranked, ...ranked.filter((t): t is TimeThief => t !== null)];
+    const draggedThief = allThieves.find((t) => t.id === active.id);
+
     if (!draggedThief) return;
 
     if (over.id === 'rank-1' || over.id === 'rank-2' || over.id === 'rank-3') {
@@ -42,15 +48,19 @@ export const TimeThiefRanking: React.FC = () => {
 
       const existingInRank = newRanked[rankIndex];
       if (existingInRank) {
-        setUnranked((prev) => [...prev, existingInRank]);
+        setUnranked((prev) => [...prev.filter(t => t.id !== draggedThief.id), existingInRank]);
+      } else {
+        setUnranked((prev) => prev.filter((t) => t.id !== draggedThief.id));
       }
 
       newRanked[rankIndex] = draggedThief;
       setRanked(newRanked);
-      setUnranked((prev) => prev.filter((t) => t.id !== draggedThief.id));
     } else if (over.id === 'unranked') {
-      setUnranked((prev) => [...prev, draggedThief]);
-      setRanked((prev) => prev.map((t) => (t?.id === draggedThief.id ? null : t)));
+      const fromRanked = ranked.find(t => t?.id === draggedThief.id);
+      if (fromRanked) {
+        setRanked((prev) => prev.map((t) => (t?.id === draggedThief.id ? null : t)));
+        setUnranked((prev) => [...prev, draggedThief]);
+      }
     }
   };
 
@@ -68,6 +78,17 @@ export const TimeThiefRanking: React.FC = () => {
   };
 
   const canProceed = ranked.filter(Boolean).length >= 3;
+
+  if (stealThieves.length === 0) {
+    return (
+      <div className="min-h-screen bg-muji-bg flex items-center justify-center p-4">
+        <div className="text-center">
+          <p className="text-muji-mid mb-4">시간도둑으로 분류된 항목이 없습니다.</p>
+          <Button onClick={() => setStep(6)}>다음으로 건너뛰기</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -125,12 +146,12 @@ const RankSlot: React.FC<{ rank: number; thief: TimeThief | null }> = ({ rank, t
   });
 
   const medals = ['medal-gold', 'medal-silver', 'medal-bronze'] as const;
-  const colors = ['#D4AF37', '#C0C0C0', '#CD7F32'];
+  const colors = ['#c4a574', '#a8a8a8', '#b08968'];
 
   return (
     <div
       ref={setNodeRef}
-      className={`p-6 border-2 rounded-lg transition-all ${
+      className={`p-6 border-2 rounded transition-all ${
         isOver ? 'border-muji-dark bg-muji-beige' : 'border-muji-beige bg-white'
       }`}
     >
@@ -157,7 +178,7 @@ const UnrankedZone: React.FC<{ thieves: TimeThief[] }> = ({ thieves }) => {
   return (
     <div
       ref={setNodeRef}
-      className={`border-t border-muji-beige pt-6 ${isOver ? 'bg-muji-beige' : ''}`}
+      className={`border-t border-muji-beige pt-6 transition-colors ${isOver ? 'bg-muji-beige' : ''}`}
     >
       <h3 className="text-sm text-muji-mid mb-4">시간도둑 카드</h3>
       <div className="grid grid-cols-2 gap-3">
@@ -188,7 +209,7 @@ const DraggableThiefCard: React.FC<{ thief: TimeThief }> = ({ thief }) => {
       style={style}
       {...listeners}
       {...attributes}
-      className="p-3 bg-white border-2 border-muji-beige rounded cursor-move hover:border-muji-mid hover:shadow-sm transition-all"
+      className="p-3 bg-white border-2 border-muji-beige rounded cursor-move hover:border-muji-mid transition-all"
     >
       <div className="flex items-center gap-2">
         <MujiIcon name="drag" size={14} className="text-muji-mid flex-shrink-0" />

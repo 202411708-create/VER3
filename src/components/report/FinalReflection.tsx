@@ -45,9 +45,9 @@ export const FinalReflection: React.FC = () => {
           className="space-y-8"
         >
           <motion.div variants={item}>
-            <Card padding="lg" className="bg-blue-50">
+            <Card padding="lg" className="bg-muji-blue-light bg-opacity-30 border-muji-blue">
               <div className="flex items-start gap-3 mb-4">
-                <MujiIcon name="thinking" size={28} className="text-blue-600 flex-shrink-0" />
+                <MujiIcon name="thinking" size={28} className="text-muji-blue flex-shrink-0" />
                 <h2 className="text-xl font-light text-muji-dark">생각해볼 질문</h2>
               </div>
               <div className="space-y-4 text-muji-dark">
@@ -91,7 +91,7 @@ export const FinalReflection: React.FC = () => {
           <motion.div variants={item} className="text-center">
             <Card padding="lg" className="bg-muji-beige mb-6">
               <div className="flex items-center justify-center gap-2 mb-3">
-                <MujiIcon name="check" size={24} className="text-green-600" />
+                <MujiIcon name="check" size={24} className="text-muji-green" />
                 <p className="text-lg text-muji-dark font-light">
                   오늘 당신은 시간의 주인이 되는 첫걸음을 뗐습니다.
                 </p>

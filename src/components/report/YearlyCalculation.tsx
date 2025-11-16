@@ -61,7 +61,7 @@ export const YearlyCalculation: React.FC = () => {
             </div>
             <div className="grid md:grid-cols-3 gap-6 text-center">
               <div>
-                <div className="text-3xl font-light text-blue-600 mb-2">
+                <div className="text-3xl font-light text-muji-blue mb-2">
                   <CountUpNumber target={totalMinutes / 60} />시간
                 </div>
                 <div className="text-sm text-muji-mid">기록한 시간</div>
@@ -70,7 +70,7 @@ export const YearlyCalculation: React.FC = () => {
                 </div>
               </div>
               <div>
-                <div className="text-3xl font-light text-red-600 mb-2">
+                <div className="text-3xl font-light text-muji-red mb-2">
                   <CountUpNumber target={unaccountedMinutes / 60} />시간
                 </div>
                 <div className="text-sm text-muji-mid">미지의 시간</div>
@@ -108,7 +108,7 @@ export const YearlyCalculation: React.FC = () => {
                     <MujiIcon
                       name={['medal-gold', 'medal-silver', 'medal-bronze'][index] as any}
                       size={24}
-                      color={['#D4AF37', '#C0C0C0', '#CD7F32'][index]}
+                      color={['#c4a574', '#a8a8a8', '#b08968'][index]}
                     />
                     <span className="text-muji-dark">{thief.label}</span>
                   </div>
@@ -123,7 +123,7 @@ export const YearlyCalculation: React.FC = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          <Card padding="lg" className="mb-8 bg-gradient-to-r from-yellow-50 to-orange-50">
+          <Card padding="lg" className="mb-8 bg-muji-yellow bg-opacity-20 border-muji-yellow">
             <div className="flex items-center gap-3 mb-4">
               <MujiIcon name="chart" size={24} className="text-muji-dark" />
               <h3 className="text-lg font-light text-muji-dark">1년으로 환산하면</h3>
@@ -131,17 +131,17 @@ export const YearlyCalculation: React.FC = () => {
             <div className="space-y-4">
               <div className="text-center">
                 <p className="text-muji-dark mb-2">
-                  하루 <span className="font-medium text-xl text-red-600">{minutesToHours(unaccountedMinutes)}</span>은
+                  하루 <span className="font-medium text-xl text-muji-red">{minutesToHours(unaccountedMinutes)}</span>은
                 </p>
                 <div className="flex justify-center items-baseline space-x-2">
                   <span className="text-muji-mid">한 달이면</span>
-                  <span className="text-2xl font-light text-orange-600">
+                  <span className="text-2xl font-light text-muji-orange">
                     {Math.round((unaccountedMinutes / 60) * 30)}시간
                   </span>
                 </div>
                 <div className="flex justify-center items-baseline space-x-2 mt-2">
                   <span className="text-muji-mid">1년이면</span>
-                  <span className="text-3xl font-light text-red-600">
+                  <span className="text-3xl font-light text-muji-red">
                     {yearlyUnaccountedDays}일
                   </span>
                   <span className="text-muji-mid">({yearlyUnaccountedHours}시간)</span>

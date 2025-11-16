@@ -61,7 +61,7 @@ export const AnalysisResult: React.FC = () => {
       className="min-h-screen bg-muji-bg p-4 md:p-8"
     >
       <div className="max-w-6xl mx-auto">
-        <ProgressBar current={3} total={5} />
+        <ProgressBar current={3} total={7} />
 
         <div className="mb-6">
           <h2 className="text-2xl md:text-3xl font-light text-muji-dark mb-2">
@@ -115,15 +115,15 @@ export const AnalysisResult: React.FC = () => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <Card padding="lg" className="mb-6 border-2 border-yellow-400 bg-yellow-50">
+            <Card padding="lg" className="mb-6 border-2 border-muji-yellow bg-muji-yellow bg-opacity-20">
               <div className="flex items-start space-x-4">
-                <MujiIcon name="warning" size={40} className="text-yellow-600 flex-shrink-0" />
+                <MujiIcon name="warning" size={40} className="text-muji-orange flex-shrink-0" />
                 <div className="flex-1">
                   <h3 className="text-lg font-medium text-muji-dark mb-2">
                     기록되지 않은 시간
                   </h3>
                   <p className="text-muji-dark mb-4">
-                    하루 중 <span className="font-medium text-xl text-red-600">{minutesToHours(unaccountedMinutes)}</span>은 기록되지 않았습니다.
+                    하루 중 <span className="font-medium text-xl text-muji-red">{minutesToHours(unaccountedMinutes)}</span>은 기록되지 않았습니다.
                   </p>
                   <p className="text-sm text-muji-mid mb-4">
                     이 시간은 휴식, 멍때림, 이동시간, 또는 기억나지 않는 활동일 수 있습니다.
@@ -138,7 +138,7 @@ export const AnalysisResult: React.FC = () => {
         )}
 
         <div className="text-center">
-          <Button size="lg" onClick={() => setStep(5)} className="inline-flex items-center gap-2">
+          <Button size="lg" onClick={() => setStep(4)} className="inline-flex items-center gap-2">
             다음
             <MujiIcon name="arrow-right" size={18} />
           </Button>

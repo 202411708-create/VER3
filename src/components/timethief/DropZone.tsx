@@ -26,22 +26,22 @@ export const DropZone: React.FC<DropZoneProps> = ({
 
   const colorStyles = {
     red: {
-      border: 'border-red-300',
-      bg: 'bg-red-50',
-      activeBg: 'bg-red-100',
-      text: 'text-red-700',
+      border: 'border-muji-red',
+      bg: 'bg-muji-pink-light bg-opacity-30',
+      activeBg: 'bg-muji-pink-light',
+      text: 'text-muji-red',
     },
     gray: {
-      border: 'border-gray-300',
-      bg: 'bg-gray-50',
-      activeBg: 'bg-gray-100',
-      text: 'text-gray-700',
+      border: 'border-muji-beige',
+      bg: 'bg-white',
+      activeBg: 'bg-muji-beige',
+      text: 'text-muji-mid',
     },
     green: {
-      border: 'border-green-300',
-      bg: 'bg-green-50',
-      activeBg: 'bg-green-100',
-      text: 'text-green-700',
+      border: 'border-muji-green',
+      bg: 'bg-muji-green bg-opacity-10',
+      activeBg: 'bg-muji-green bg-opacity-20',
+      text: 'text-muji-green',
     },
   };
 
@@ -57,7 +57,7 @@ export const DropZone: React.FC<DropZoneProps> = ({
       }`}
     >
       <div className="text-center mb-4">
-        <h3 className={`font-bold text-muji-dark mb-1`}>{title}</h3>
+        <h3 className={`font-medium text-muji-dark mb-1`}>{title}</h3>
         <p className="text-xs text-muji-mid">{description}</p>
       </div>
 
