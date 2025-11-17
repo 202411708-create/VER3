@@ -7,7 +7,7 @@ import { Button } from '../common/Button';
 import { MujiIcon } from '../common/MujiIcon';
 import { ProgressBar } from '../common/ProgressBar';
 import { PieChartComponent } from './PieChart';
-import { UnaccountedModal } from './UnaccountedModal';
+import { TimeInputForm } from '../timeline/TimeInputForm';
 import { useAppStore } from '../../store/appStore';
 import {
   calculateTotalMinutes,
@@ -18,7 +18,8 @@ import type { ActivityCategory } from '../../types';
 
 export const AnalysisResult: React.FC = () => {
   const { timeEntries, setStep, reset } = useAppStore();
-  const [showModal, setShowModal] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [selectedCategory] = useState<ActivityCategory>('기타');
 
   const totalMinutes = calculateTotalMinutes(timeEntries);
   const unaccountedMinutes = calculateUnaccountedMinutes(timeEntries);
@@ -134,7 +135,7 @@ export const AnalysisResult: React.FC = () => {
                   <p className="text-sm text-muji-mid mb-4">
                     이 시간은 휴식, 멍때림, 이동시간, 또는 기억나지 않는 활동일 수 있습니다.
                   </p>
-                  <Button variant="secondary" onClick={() => setShowModal(true)}>
+                  <Button variant="secondary" onClick={() => setShowForm(true)}>
                     + 추가 기록하기
                   </Button>
                 </div>
@@ -151,7 +152,13 @@ export const AnalysisResult: React.FC = () => {
         </div>
       </div>
 
-      {showModal && <UnaccountedModal onClose={() => setShowModal(false)} />}
+      {showForm && (
+        <TimeInputForm
+          category={selectedCategory}
+          editingEntry={null}
+          onClose={() => setShowForm(false)}
+        />
+      )}
     </motion.div>
   );
 };

@@ -20,9 +20,6 @@ export const TimelineInput: React.FC = () => {
   const [editingEntry, setEditingEntry] = useState<TimeEntry | null>(null);
 
   const totalMinutes = calculateTotalMinutes(timeEntries);
-  const unaccountedMinutes = 1440 - totalMinutes;
-  const unaccountedHours = Math.floor(unaccountedMinutes / 60);
-  const isFullyRecorded = unaccountedMinutes === 0;
 
   const handleAddActivity = () => {
     setEditingEntry(null);
@@ -87,63 +84,18 @@ export const TimelineInput: React.FC = () => {
         </Card>
 
         <Card padding="lg" className="mb-6">
-          <h3 className="text-sm font-medium text-muji-mid mb-3">24시간 타임라인</h3>
+          <h3 className="text-sm font-medium text-muji-mid mb-3">
+            24시간 타임라인
+            <span className="text-xs text-muji-light ml-2">
+              (타임라인을 드래그하여 활동 추가)
+            </span>
+          </h3>
           <TimelineCanvas
             entries={timeEntries}
             onEditEntry={handleEditActivity}
+            selectedCategory={selectedCategory}
           />
         </Card>
-
-        {unaccountedHours > 0 && timeEntries.length > 0 && (
-          <motion.div
-            key="unaccounted-warning"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-          >
-            <Card padding="lg" className="mb-6 bg-muji-yellow bg-opacity-20 border-muji-yellow">
-              <div className="flex items-start gap-3">
-                <MujiIcon name="warning" size={20} className="text-muji-orange flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <h3 className="text-sm font-medium text-muji-dark mb-2">
-                    기록되지 않은 시간
-                  </h3>
-                  <p className="text-sm text-muji-dark mb-3">
-                    하루 중 <span className="font-medium text-muji-red">{unaccountedHours}시간 {unaccountedMinutes % 60}분</span>은 기록되지 않았습니다.
-                    <br />
-                    이 시간은 휴식, 멍때림, 이동시간, 또는 기억나지 않는 활동일 수 있습니다.
-                  </p>
-                  <Button variant="secondary" size="sm" onClick={handleAddActivity}>
-                    추가 기록하기
-                  </Button>
-                </div>
-              </div>
-            </Card>
-          </motion.div>
-        )}
-
-        {isFullyRecorded && timeEntries.length > 0 && (
-          <motion.div
-            key="fully-recorded"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Card padding="lg" className="mb-6 bg-muji-green bg-opacity-10 border-muji-green">
-              <div className="flex items-center gap-3">
-                <MujiIcon name="check" size={24} className="text-muji-green" />
-                <div className="flex-1">
-                  <h3 className="text-sm font-medium text-muji-dark mb-1">
-                    완벽합니다!
-                  </h3>
-                  <p className="text-sm text-muji-dark">
-                    24시간이 모두 기록되었습니다. 이제 분석을 시작할 수 있습니다.
-                  </p>
-                </div>
-              </div>
-            </Card>
-          </motion.div>
-        )}
 
         <Card padding="lg" className="mb-6">
           <div className="flex justify-between items-center mb-4">
