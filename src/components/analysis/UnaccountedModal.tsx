@@ -16,7 +16,6 @@ export const UnaccountedModal: React.FC<UnaccountedModalProps> = ({ onClose }) =
   const { addUnaccountedTime, unaccountedTimes } = useAppStore();
   const [selectedType, setSelectedType] = useState<UnaccountedTime['type'] | null>(null);
   const [customLabel, setCustomLabel] = useState('');
-  const [duration, setDuration] = useState(30);
 
   const handleAdd = () => {
     if (!selectedType && !customLabel) {
@@ -27,16 +26,15 @@ export const UnaccountedModal: React.FC<UnaccountedModalProps> = ({ onClose }) =
       id: Date.now().toString(),
       type: selectedType || '기억안남',
       customLabel: customLabel || undefined,
-      duration,
+      duration: 0, // 시간은 기록하지 않음
     };
 
     addUnaccountedTime(newTime);
     setSelectedType(null);
     setCustomLabel('');
-    setDuration(30);
   };
 
-  const typeOptions: UnaccountedTime['type'][] = ['이동시간', '멍때림', '휴식', '기억안남'];
+  const typeOptions: UnaccountedTime['type'][] = ['휴식', '멍때림', '이동시간'];
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -47,7 +45,7 @@ export const UnaccountedModal: React.FC<UnaccountedModalProps> = ({ onClose }) =
       >
         <Card padding="lg">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-bold text-muji-dark">미지의 시간 분류</h3>
+            <h3 className="text-lg font-medium text-muji-dark">활동 추가하기</h3>
             <button
               onClick={onClose}
               className="text-muji-mid hover:text-muji-dark"
@@ -57,18 +55,21 @@ export const UnaccountedModal: React.FC<UnaccountedModalProps> = ({ onClose }) =
           </div>
 
           <p className="text-sm text-muji-mid mb-4">
-            기록되지 않은 시간이 무엇이었을지 선택해주세요
+            기록되지 않은 시간에 어떤 활동을 했는지 추가해주세요
           </p>
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-muji-dark mb-2">
-              시간 유형 선택
+              활동 선택
             </label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {typeOptions.map((type) => (
                 <button
                   key={type}
-                  onClick={() => setSelectedType(type)}
+                  onClick={() => {
+                    setSelectedType(type);
+                    setCustomLabel('');
+                  }}
                   className={`p-3 rounded border-2 transition-all ${
                     selectedType === type
                       ? 'border-muji-dark bg-muji-beige'
@@ -103,30 +104,15 @@ export const UnaccountedModal: React.FC<UnaccountedModalProps> = ({ onClose }) =
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-muji-dark mb-2">
-              소요 시간 (분)
-            </label>
-            <input
-              type="number"
-              min="5"
-              max="1440"
-              step="5"
-              value={duration}
-              onChange={(e) => setDuration(parseInt(e.target.value) || 30)}
-              className="w-full px-3 py-2 border border-muji-mid rounded focus:outline-none focus:ring-2 focus:ring-muji-dark"
-            />
-          </div>
-
           {unaccountedTimes.length > 0 && (
             <div className="mb-4 p-3 bg-muji-beige rounded">
               <h4 className="text-sm font-medium text-muji-dark mb-2">
-                추가된 시간들:
+                추가된 활동:
               </h4>
               <ul className="space-y-1 text-sm text-muji-mid">
                 {unaccountedTimes.map((time) => (
                   <li key={time.id}>
-                    • {time.customLabel || time.type} ({time.duration}분)
+                    • {time.customLabel || time.type}
                   </li>
                 ))}
               </ul>

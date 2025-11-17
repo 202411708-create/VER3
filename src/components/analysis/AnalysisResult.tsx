@@ -7,7 +7,7 @@ import { Button } from '../common/Button';
 import { MujiIcon } from '../common/MujiIcon';
 import { ProgressBar } from '../common/ProgressBar';
 import { PieChartComponent } from './PieChart';
-import { TimeInputForm } from '../timeline/TimeInputForm';
+import { UnaccountedModal } from './UnaccountedModal';
 import { useAppStore } from '../../store/appStore';
 import {
   calculateTotalMinutes,
@@ -17,9 +17,8 @@ import {
 import type { ActivityCategory } from '../../types';
 
 export const AnalysisResult: React.FC = () => {
-  const { timeEntries, setStep, reset } = useAppStore();
-  const [showForm, setShowForm] = useState(false);
-  const [selectedCategory] = useState<ActivityCategory>('기타');
+  const { timeEntries, setStep, reset, unaccountedTimes } = useAppStore();
+  const [showModal, setShowModal] = useState(false);
 
   const totalMinutes = calculateTotalMinutes(timeEntries);
   const unaccountedMinutes = calculateUnaccountedMinutes(timeEntries);
@@ -132,10 +131,25 @@ export const AnalysisResult: React.FC = () => {
                   <p className="text-muji-dark mb-4">
                     하루 중 <span className="font-medium text-xl text-muji-red">{minutesToHours(unaccountedMinutes)}</span>은 기록되지 않았습니다.
                   </p>
-                  <p className="text-sm text-muji-mid mb-4">
-                    이 시간은 휴식, 멍때림, 이동시간, 또는 기억나지 않는 활동일 수 있습니다.
+                  <p className="text-sm text-muji-mid mb-3">
+                    이 시간은{' '}
+                    {unaccountedTimes.length > 0 ? (
+                      <>
+                        {unaccountedTimes.map((item, index) => (
+                          <span key={item.id}>
+                            <span className="font-medium text-muji-dark">
+                              {item.customLabel || item.type}
+                            </span>
+                            {index < unaccountedTimes.length - 1 && ', '}
+                          </span>
+                        ))}
+                      </>
+                    ) : (
+                      '휴식, 멍때림, 이동시간'
+                    )}
+                    , 또는 기억나지 않는 활동일 수 있습니다.
                   </p>
-                  <Button variant="secondary" onClick={() => setShowForm(true)}>
+                  <Button variant="secondary" onClick={() => setShowModal(true)}>
                     + 추가 기록하기
                   </Button>
                 </div>
@@ -152,13 +166,7 @@ export const AnalysisResult: React.FC = () => {
         </div>
       </div>
 
-      {showForm && (
-        <TimeInputForm
-          category={selectedCategory}
-          editingEntry={null}
-          onClose={() => setShowForm(false)}
-        />
-      )}
+      {showModal && <UnaccountedModal onClose={() => setShowModal(false)} />}
     </motion.div>
   );
 };
