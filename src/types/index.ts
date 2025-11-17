@@ -33,10 +33,18 @@ export interface TimeThief {
   rank?: number | null;
 }
 
+export interface TimelineEntry {
+  id: string;
+  startTime: string;
+  endTime: string;
+  activity: string;
+}
+
 export interface AppState {
   currentStep: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
   timeEntries: TimeEntry[];
   unaccountedTimes: UnaccountedTime[];
   timeThieves: TimeThief[];
   wastedTimeIds: string[];
+  wastedTimeDetails: { [entryId: string]: number };
 }

@@ -15,6 +15,7 @@ interface AppStore extends AppState {
   setTimeThiefCategory: (id: string, category: TimeThief['category']) => void;
   setTimeThieves: (thieves: TimeThief[]) => void;
   toggleWastedTime: (id: string) => void;
+  setWastedTime: (entryId: string, minutes: number) => void;
   getTotalWastedMinutes: () => number;
   reset: () => void;
 }
@@ -25,6 +26,7 @@ const initialState: AppState = {
   unaccountedTimes: [],
   timeThieves: DEFAULT_TIME_THIEVES,
   wastedTimeIds: [],
+  wastedTimeDetails: {},
 };
 
 export const useAppStore = create<AppStore>()(
@@ -77,11 +79,20 @@ export const useAppStore = create<AppStore>()(
             : [...state.wastedTimeIds, id],
         })),
 
+      setWastedTime: (entryId, minutes) =>
+        set((state) => ({
+          wastedTimeDetails: {
+            ...state.wastedTimeDetails,
+            [entryId]: minutes,
+          },
+        })),
+
       getTotalWastedMinutes: (): number => {
         const state = useAppStore.getState();
-        return state.timeEntries
-          .filter((entry: TimeEntry) => state.wastedTimeIds.includes(entry.id))
-          .reduce((total: number, entry: TimeEntry) => total + entry.duration, 0);
+        return Object.values(state.wastedTimeDetails).reduce(
+          (sum, minutes) => sum + minutes,
+          0
+        );
       },
 
       reset: () => set(initialState),
