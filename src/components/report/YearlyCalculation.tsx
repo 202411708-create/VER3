@@ -9,7 +9,10 @@ import { ProgressBar } from '../common/ProgressBar';
 import { useAppStore } from '../../store/appStore';
 
 export const YearlyCalculation: React.FC = () => {
-  const { timeThieves, getTotalWastedMinutes, setStep, reset } = useAppStore();
+  const { timeEntries, timeThieves, getTotalWastedMinutes, setStep, reset } = useAppStore();
+
+  // 기록한 시간 계산
+  const totalMinutes = timeEntries.reduce((sum, entry) => sum + entry.duration, 0);
 
   // ✅ 반드시 getTotalWastedMinutes()만 사용
   const wastedMinutes = getTotalWastedMinutes();
@@ -60,11 +63,52 @@ export const YearlyCalculation: React.FC = () => {
           </h1>
         </motion.div>
 
+        {/* 24시간 분석표 */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Card padding="lg" className="mb-8">
+            <div className="flex items-center gap-3 mb-6">
+              <MujiIcon name="clock" size={28} className="text-muji-dark" />
+              <h2 className="text-xl font-light text-muji-dark">당신의 하루 24시간</h2>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6 text-center">
+              <div>
+                <div className="text-3xl font-light text-muji-dark mb-2">
+                  {Math.round(totalMinutes / 60 * 10) / 10}시간
+                </div>
+                <div className="text-sm text-muji-mid">기록한 시간</div>
+                <div className="text-xs text-muji-mid mt-1">
+                  ({((totalMinutes / 1440) * 100).toFixed(0)}%)
+                </div>
+              </div>
+              <div>
+                <div className="text-3xl font-light text-[#d4a574] mb-2">
+                  {formatTime(wastedMinutes)}
+                </div>
+                <div className="text-sm text-muji-mid">낭비한 시간</div>
+                <div className="text-xs text-muji-mid mt-1">
+                  ({((wastedMinutes / 1440) * 100).toFixed(0)}%)
+                </div>
+              </div>
+              <div>
+                <div className="text-3xl font-light text-muji-dark mb-2">
+                  {stealThieves.length}개
+                </div>
+                <div className="text-sm text-muji-mid">시간도둑 발견</div>
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+
+        {/* 시간도둑 TOP 3 */}
         {rankedThieves.length > 0 && (
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.4 }}
           >
             <Card padding="lg" className="mb-8">
               <div className="flex items-center gap-3 mb-4">
@@ -91,7 +135,7 @@ export const YearlyCalculation: React.FC = () => {
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.5 }}
         >
           <Card padding="lg" className="mb-8 bg-white border-2 border-muji-dark">
             <div className="flex items-center gap-3 mb-6">
@@ -101,29 +145,34 @@ export const YearlyCalculation: React.FC = () => {
 
             <div className="space-y-4">
               <div className="text-center">
-                <div className="mb-3">
-                  <div className="text-muji-mid mb-1">하루</div>
-                  <div className="text-3xl font-light text-[#d4a574]">
+                <div className="mb-4">
+                  <div className="text-muji-mid mb-2">하루에 낭비한 시간</div>
+                  <div className="text-4xl font-bold text-[#d4a574]">
                     {formatTime(wastedMinutes)}
                   </div>
                 </div>
 
-                <div className="text-muji-mid my-2">은</div>
+                <div className="my-4 text-3xl text-muji-mid">↓</div>
 
-                <div className="mb-3">
-                  <div className="text-muji-mid mb-1">한 달이면</div>
-                  <div className="text-3xl font-light text-[#d4a574]">
-                    {Math.round(yearlyWastedHours / 12)}시간
+                <div className="mb-4">
+                  <div className="text-muji-mid mb-2">한 달이면</div>
+                  <div className="text-4xl font-bold text-[#d4a574]">
+                    약 {Math.round(yearlyWastedHours / 12)}시간
+                  </div>
+                  <div className="text-sm text-muji-mid mt-1">
+                    ({Math.round(yearlyWastedDays / 12 * 10) / 10}일)
                   </div>
                 </div>
 
-                <div>
-                  <div className="text-muji-mid mb-1">1년이면</div>
-                  <div className="text-4xl font-light text-[#d4a574]">
-                    {Math.round(yearlyWastedDays)}일
+                <div className="my-4 text-3xl text-muji-mid">↓</div>
+
+                <div className="mb-4">
+                  <div className="text-muji-mid mb-2">1년이면</div>
+                  <div className="text-5xl font-bold text-[#d4a574]">
+                    약 {Math.round(yearlyWastedDays)}일
                   </div>
-                  <div className="text-muji-mid mt-1">
-                    ({Math.round(yearlyWastedHours)}시간)
+                  <div className="text-lg text-muji-mid mt-2">
+                    (약 {Math.round(yearlyWastedHours)}시간)
                   </div>
                 </div>
               </div>
