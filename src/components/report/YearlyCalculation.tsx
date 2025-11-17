@@ -19,6 +19,9 @@ export const YearlyCalculation: React.FC = () => {
   const wastedHours = wastedMinutes / 60;
   const wastedDays = wastedHours / 24;
 
+  // 미지의 시간 계산 (24시간 - 기록한 시간)
+  const unaccountedMinutes = 1440 - totalMinutes;
+
   // 1년 환산
   const yearlyWastedHours = wastedHours * 365;
   const yearlyWastedDays = wastedDays * 365;
@@ -88,16 +91,19 @@ export const YearlyCalculation: React.FC = () => {
                 <div className="text-3xl font-light text-[#d4a574] mb-2">
                   {formatTime(wastedMinutes)}
                 </div>
-                <div className="text-sm text-muji-mid">낭비한 시간</div>
+                <div className="text-sm text-muji-mid">그 중 낭비한 시간</div>
                 <div className="text-xs text-muji-mid mt-1">
                   ({((wastedMinutes / 1440) * 100).toFixed(0)}%)
                 </div>
               </div>
               <div>
-                <div className="text-3xl font-light text-muji-dark mb-2">
-                  {stealThieves.length}개
+                <div className="text-3xl font-light text-muji-mid mb-2">
+                  {Math.round(unaccountedMinutes / 60 * 10) / 10}시간
                 </div>
-                <div className="text-sm text-muji-mid">시간도둑 발견</div>
+                <div className="text-sm text-muji-mid">미지의 시간</div>
+                <div className="text-xs text-muji-mid mt-1">
+                  ({((unaccountedMinutes / 1440) * 100).toFixed(0)}%)
+                </div>
               </div>
             </div>
           </Card>
@@ -116,17 +122,20 @@ export const YearlyCalculation: React.FC = () => {
                 <h3 className="text-lg font-light text-muji-dark">시간도둑 TOP 3</h3>
               </div>
               <div className="space-y-3">
-                {rankedThieves.slice(0, 3).map((thief, index) => (
-                  <div
-                    key={thief.id}
-                    className="flex items-center gap-3 p-3 border border-muji-beige rounded"
-                  >
-                    <span className="text-2xl">
-                      {['🥇', '🥈', '🥉'][index]}
-                    </span>
-                    <span className="text-muji-dark">{thief.label}</span>
-                  </div>
-                ))}
+                {rankedThieves.slice(0, 3).map((thief, index) => {
+                  const medals = ['medal-gold', 'medal-silver', 'medal-bronze'] as const;
+                  const colors = ['#c4a574', '#a8a8a8', '#b08968'];
+
+                  return (
+                    <div
+                      key={thief.id}
+                      className="flex items-center gap-3 p-3 border border-muji-beige rounded"
+                    >
+                      <MujiIcon name={medals[index]} size={32} color={colors[index]} />
+                      <span className="text-muji-dark">{thief.label}</span>
+                    </div>
+                  );
+                })}
               </div>
             </Card>
           </motion.div>

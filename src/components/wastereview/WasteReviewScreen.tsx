@@ -57,33 +57,43 @@ export const WasteReviewScreen: React.FC = () => {
 
   return (
     <motion.div
-      className="h-screen flex flex-col bg-muji-bg"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-muji-bg p-4 md:p-8"
     >
-      <ProgressBar current={6} total={8} />
+      <div className="max-w-4xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <ProgressBar current={6} total={8} />
+          <Button variant="ghost" size="sm" onClick={() => setStep(1)} className="flex items-center gap-1 ml-4">
+            <MujiIcon name="arrow" size={16} />
+            처음으로
+          </Button>
+        </div>
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-6">
-        <div className="max-w-2xl mx-auto space-y-6">
-          {/* 헤더 */}
-          <div className="text-center space-y-2">
-            <MujiIcon name="search" size={28} />
-            <h2 className="text-2xl md:text-3xl font-light text-muji-dark">
-              낭비된 시간을 찾아보세요
-            </h2>
-            <p className="text-muji-mid">
-              각 활동에서 얼마나 낭비했는지 슬라이더로 조절해주세요
-            </p>
-          </div>
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-light text-muji-dark mb-4">
+            낭비된 시간을 찾아보세요
+          </h1>
+          <p className="text-muji-mid">
+            각 활동에서 얼마나 낭비했는지 슬라이더로 조절해주세요
+          </p>
+        </motion.div>
+
+        <div className="space-y-6">
 
           {/* 합계 카드 */}
-          <Card className="bg-muji-dark text-white">
+          <Card className="bg-white border-2 border-muji-dark">
             <div className="flex justify-between items-center">
-              <span className="text-sm opacity-90">총 낭비 시간</span>
+              <span className="text-sm text-muji-mid">총 낭비 시간</span>
               <motion.span
                 key={totalWasted}
-                className="text-2xl font-medium"
+                className="text-2xl font-medium text-muji-dark"
                 initial={{ scale: 1.2 }}
                 animate={{ scale: 1 }}
               >
@@ -220,17 +230,16 @@ export const WasteReviewScreen: React.FC = () => {
             })}
           </div>
         </div>
-      </div>
 
-      {/* 하단 버튼 */}
-      <div className="p-4 md:p-6 border-t border-muji-beige bg-white">
-        <div className="max-w-2xl mx-auto">
+        <div className="text-center mt-8">
           <Button
-            variant="primary"
+            size="lg"
             onClick={() => setStep(7)}
             disabled={totalWasted === 0}
+            className="inline-flex items-center gap-2"
           >
             다음
+            <MujiIcon name="arrow-right" size={18} />
           </Button>
         </div>
       </div>
