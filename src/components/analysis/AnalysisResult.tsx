@@ -131,24 +131,25 @@ export const AnalysisResult: React.FC = () => {
                   <p className="text-muji-dark mb-4">
                     하루 중 <span className="font-medium text-xl text-muji-red">{minutesToHours(unaccountedMinutes)}</span>은 기록되지 않았습니다.
                   </p>
-                  <p className="text-sm text-muji-mid mb-3">
-                    이 시간은{' '}
-                    {unaccountedTimes.length > 0 ? (
-                      <>
-                        {unaccountedTimes.map((item, index) => (
-                          <span key={item.id}>
-                            <span className="font-medium text-muji-dark">
+
+                  {unaccountedTimes.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-sm text-muji-mid mb-2">추가된 활동:</p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                        {unaccountedTimes.map((item) => (
+                          <div
+                            key={item.id}
+                            className="px-3 py-2 bg-white border-2 border-muji-mid rounded-lg text-center"
+                          >
+                            <span className="text-sm font-medium text-muji-dark">
                               {item.customLabel || item.type}
                             </span>
-                            {index < unaccountedTimes.length - 1 && ', '}
-                          </span>
+                          </div>
                         ))}
-                      </>
-                    ) : (
-                      '휴식, 멍때림, 이동시간'
-                    )}
-                    , 또는 기억나지 않는 활동일 수 있습니다.
-                  </p>
+                      </div>
+                    </div>
+                  )}
+
                   <Button variant="secondary" onClick={() => setShowModal(true)}>
                     + 추가 기록하기
                   </Button>
