@@ -124,7 +124,7 @@ export const TimelineCanvas: React.FC<TimelineCanvasProps> = ({
 
       <DndContext onDragEnd={handleDragEnd}>
         <div
-          className="relative h-16 bg-muji-beige rounded overflow-visible cursor-crosshair"
+          className="relative h-16 bg-muji-beige rounded overflow-hidden cursor-crosshair"
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -139,13 +139,10 @@ export const TimelineCanvas: React.FC<TimelineCanvasProps> = ({
           ))}
 
           {isDraggingNew && dragStart !== null && dragCurrent !== null && (
-            <div
-              className={`absolute top-0 h-full ${ACTIVITY_COLORS[selectedCategory]} opacity-50 border-2 border-dashed ${ACTIVITY_BORDER_COLORS[selectedCategory]}`}
-              style={{
-                left: `${(Math.min(dragStart, dragCurrent) / 1440) * 100}%`,
-                width: `${(Math.abs(dragCurrent - dragStart) / 1440) * 100}%`,
-                pointerEvents: 'none',
-              }}
+            <DragPreview
+              dragStart={dragStart}
+              dragCurrent={dragCurrent}
+              selectedCategory={selectedCategory}
             />
           )}
         </div>
@@ -164,6 +161,26 @@ export const TimelineCanvas: React.FC<TimelineCanvasProps> = ({
   );
 };
 
+const DragPreview: React.FC<{
+  dragStart: number;
+  dragCurrent: number;
+  selectedCategory: ActivityCategory;
+}> = ({ dragStart, dragCurrent, selectedCategory }) => {
+  const startMinutes = Math.min(dragStart, dragCurrent);
+  const endMinutes = Math.max(dragStart, dragCurrent);
+
+  return (
+    <div
+      className={`absolute top-0 h-full ${ACTIVITY_COLORS[selectedCategory]} opacity-50 border-2 border-dashed ${ACTIVITY_BORDER_COLORS[selectedCategory]}`}
+      style={{
+        left: `${(startMinutes / 1440) * 100}%`,
+        width: `${((endMinutes - startMinutes) / 1440) * 100}%`,
+        pointerEvents: 'none',
+      }}
+    />
+  );
+};
+
 const DraggableTimeEntry: React.FC<{
   entry: TimeEntry;
   onEdit: (entry: TimeEntry) => void;
@@ -172,7 +189,11 @@ const DraggableTimeEntry: React.FC<{
     id: entry.id,
   });
 
-  const startPercent = ((entry.startHour * 60 + entry.startMinute) / 1440) * 100;
+  const startMinutes = entry.startHour * 60 + entry.startMinute;
+  const endMinutes = startMinutes + entry.duration;
+  const crossesMidnight = endMinutes > 1440;
+
+  const startPercent = (startMinutes / 1440) * 100;
   const widthPercent = (entry.duration / 1440) * 100;
 
   const style = transform
@@ -187,13 +208,74 @@ const DraggableTimeEntry: React.FC<{
         width: `${widthPercent}%`,
       };
 
+  const baseClasses = `absolute top-0 h-full ${entry.color} hover:opacity-80 transition-opacity border-l-2 border-r-2 border-white flex items-center justify-center ${
+    isDragging ? 'opacity-70 shadow-lg' : ''
+  }`;
+
+  if (crossesMidnight) {
+    // 자정을 넘는 경우: 두 개의 세그먼트로 렌더링
+    const firstSegmentDuration = 1440 - startMinutes;
+    const secondSegmentDuration = endMinutes - 1440;
+
+    const firstSegmentWidth = (firstSegmentDuration / 1440) * 100;
+    const secondSegmentWidth = (secondSegmentDuration / 1440) * 100;
+
+    return (
+      <>
+        {/* 첫 번째 세그먼트: startTime부터 23:59까지 */}
+        <div
+          ref={setNodeRef}
+          style={{
+            left: `${startPercent}%`,
+            width: `${firstSegmentWidth}%`,
+            zIndex: isDragging ? 50 : 1,
+          }}
+          className={baseClasses}
+          title={`${entry.category} (${entry.duration}분) - 자정 넘김`}
+          {...listeners}
+          {...attributes}
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(entry);
+            }}
+            className="text-xs text-white font-medium truncate px-1 w-full h-full flex items-center justify-center"
+          >
+            {entry.category}
+          </button>
+        </div>
+
+        {/* 두 번째 세그먼트: 00:00부터 endTime까지 */}
+        <div
+          style={{
+            left: '0%',
+            width: `${secondSegmentWidth}%`,
+            zIndex: isDragging ? 50 : 1,
+          }}
+          className={baseClasses}
+          title={`${entry.category} (${entry.duration}분) - 자정 넘김`}
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(entry);
+            }}
+            className="text-xs text-white font-medium truncate px-1 w-full h-full flex items-center justify-center"
+          >
+            {entry.category}
+          </button>
+        </div>
+      </>
+    );
+  }
+
+  // 일반적인 경우: 단일 세그먼트
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={`absolute top-0 h-full ${entry.color} hover:opacity-80 transition-opacity cursor-move border-l-2 border-r-2 border-white flex items-center justify-center ${
-        isDragging ? 'opacity-70 shadow-lg' : ''
-      }`}
+      className={`${baseClasses} cursor-move`}
       title={`${entry.category} (${entry.duration}분) - 드래그하여 이동`}
       {...listeners}
       {...attributes}
