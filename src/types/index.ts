@@ -16,6 +16,7 @@ export interface TimeEntry {
   startMinute: number;
   duration: number;
   color: string;
+  isWasted?: boolean;
 }
 
 export interface UnaccountedTime {
@@ -33,8 +34,9 @@ export interface TimeThief {
 }
 
 export interface AppState {
-  currentStep: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  currentStep: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
   timeEntries: TimeEntry[];
   unaccountedTimes: UnaccountedTime[];
   timeThieves: TimeThief[];
+  wastedTimeIds: string[];
 }

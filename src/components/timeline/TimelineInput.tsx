@@ -44,7 +44,7 @@ export const TimelineInput: React.FC = () => {
       className="min-h-screen bg-muji-bg p-4 md:p-8"
     >
       <div className="max-w-6xl mx-auto">
-        <ProgressBar current={2} total={7} />
+        <ProgressBar current={2} total={8} />
 
         <div className="flex justify-between items-start mb-6">
           <div>

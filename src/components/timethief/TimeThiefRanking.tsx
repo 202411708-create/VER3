@@ -99,7 +99,7 @@ export const TimeThiefRanking: React.FC = () => {
     >
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center">
-          <ProgressBar current={5} total={7} />
+          <ProgressBar current={5} total={8} />
           <Button variant="ghost" size="sm" onClick={reset} className="flex items-center gap-1 ml-4">
             <MujiIcon name="arrow" size={16} />
             처음으로

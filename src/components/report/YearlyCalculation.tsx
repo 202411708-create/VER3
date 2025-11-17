@@ -35,7 +35,7 @@ export const YearlyCalculation: React.FC = () => {
     >
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <ProgressBar current={6} total={7} />
+          <ProgressBar current={7} total={8} />
           <Button variant="ghost" size="sm" onClick={reset} className="flex items-center gap-1 ml-4">
             <MujiIcon name="arrow" size={16} />
             처음으로
@@ -173,7 +173,7 @@ export const YearlyCalculation: React.FC = () => {
         <div className="text-center">
           <Button
             size="lg"
-            onClick={() => setStep(7)}
+            onClick={() => setStep(8)}
             className="inline-flex items-center gap-2"
           >
             다음

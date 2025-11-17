@@ -6,14 +6,12 @@ import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { MujiIcon } from '../common/MujiIcon';
 import { useAppStore } from '../../store/appStore';
-import {
-  calculateUnaccountedMinutes,
-  minutesToHours,
-} from '../../utils/timeCalculator';
 
 export const FinalReflection: React.FC = () => {
-  const { timeEntries, reset } = useAppStore();
-  const unaccountedMinutes = calculateUnaccountedMinutes(timeEntries);
+  const { reset, getTotalWastedMinutes } = useAppStore();
+  const wastedMinutes = getTotalWastedMinutes();
+  const wastedHours = wastedMinutes / 60;
+  const yearlyCost = wastedHours * 365;
 
   const container = {
     hidden: { opacity: 0 },
@@ -45,6 +43,26 @@ export const FinalReflection: React.FC = () => {
           className="space-y-8"
         >
           <motion.div variants={item}>
+            <Card padding="lg" className="bg-muji-pink-light bg-opacity-50 border-muji-red">
+              <div className="flex items-start gap-3 mb-4">
+                <MujiIcon name="warning" size={28} className="text-muji-red flex-shrink-0" />
+                <h2 className="text-xl font-light text-muji-dark">낭비된 시간의 실체</h2>
+              </div>
+              <div className="space-y-4 text-muji-dark">
+                <p className="text-2xl font-medium leading-relaxed">
+                  당신이 체크한 낭비 시간은 하루 {wastedHours.toFixed(1)}시간입니다.
+                </p>
+                <p className="text-xl leading-relaxed">
+                  1년이면 <span className="font-medium text-muji-red">{yearlyCost.toFixed(0)}시간</span>을 잃게 됩니다.
+                </p>
+                <p className="text-base leading-relaxed text-muji-mid">
+                  이는 약 <span className="font-medium">{(yearlyCost / 24).toFixed(0)}일</span>에 해당하는 시간입니다.
+                </p>
+              </div>
+            </Card>
+          </motion.div>
+
+          <motion.div variants={item}>
             <Card padding="lg" className="bg-muji-blue-light bg-opacity-30 border-muji-blue">
               <div className="flex items-start gap-3 mb-4">
                 <MujiIcon name="thinking" size={28} className="text-muji-blue flex-shrink-0" />
@@ -52,7 +70,7 @@ export const FinalReflection: React.FC = () => {
               </div>
               <div className="space-y-4 text-muji-dark">
                 <p className="leading-relaxed">
-                  • 미지의 {minutesToHours(unaccountedMinutes)} 중 1시간만 회복한다면 무엇을 하시겠습니까?
+                  • 낭비된 시간 중 1시간만 회복한다면 무엇을 하시겠습니까?
                 </p>
                 <p className="leading-relaxed">
                   • 당신의 시간도둑은 정말 '휴식'이었나요?
@@ -80,7 +98,7 @@ export const FinalReflection: React.FC = () => {
                 <p className="text-lg leading-relaxed font-medium">
                   "이 프로그램을 1주일 후 다시 해보세요.
                   <br />
-                  미지의 시간이 줄어들었다면,
+                  낭비된 시간이 줄어들었다면,
                   <br />
                   당신은 성장하고 있는 겁니다."
                 </p>
