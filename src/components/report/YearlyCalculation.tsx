@@ -120,12 +120,18 @@ export const YearlyCalculation: React.FC = () => {
                       <div>
                         <div className="text-xl font-light text-[#d4a574]">
                           {formatTime(wastedMinutes)}
+                          <span className="text-sm ml-2">
+                            ({totalMinutes > 0 ? ((wastedMinutes / totalMinutes) * 100).toFixed(0) : 0}%)
+                          </span>
                         </div>
                         <div className="text-xs text-muji-mid">낭비한 시간</div>
                       </div>
                       <div>
                         <div className="text-xl font-light text-muji-dark">
                           {formatTime(nonWastedMinutes)}
+                          <span className="text-sm ml-2">
+                            ({totalMinutes > 0 ? ((nonWastedMinutes / totalMinutes) * 100).toFixed(0) : 0}%)
+                          </span>
                         </div>
                         <div className="text-xs text-muji-mid">낭비되지 않은 시간</div>
                       </div>
