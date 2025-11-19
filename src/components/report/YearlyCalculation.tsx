@@ -1,7 +1,7 @@
 // src/components/report/YearlyCalculation.tsx
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { MujiIcon } from '../common/MujiIcon';
@@ -26,10 +26,16 @@ export const YearlyCalculation: React.FC = () => {
   const yearlyWastedHours = wastedHours * 365;
   const yearlyWastedDays = wastedDays * 365;
 
+  // 낭비되지 않은 시간 계산
+  const nonWastedMinutes = totalMinutes - wastedMinutes;
+
   const stealThieves = timeThieves.filter((t) => t.category === 'steal');
   const rankedThieves = stealThieves
     .filter((t) => t.rank)
     .sort((a, b) => (a.rank || 0) - (b.rank || 0));
+
+  // 기록한 시간 클릭 시 세부 정보 표시 상태
+  const [showRecordedDetails, setShowRecordedDetails] = useState(false);
 
   const formatTime = (min: number) => {
     const h = Math.floor(min / 60);
@@ -77,27 +83,60 @@ export const YearlyCalculation: React.FC = () => {
               <MujiIcon name="clock" size={28} className="text-muji-dark" />
               <h2 className="text-xl font-light text-muji-dark">당신의 하루 24시간</h2>
             </div>
-            <div className="grid md:grid-cols-3 gap-6 text-center">
-              <div>
+            <div className="grid md:grid-cols-2 gap-6 text-center">
+              {/* 기록한 시간 - 클릭 가능 */}
+              <div
+                className="cursor-pointer p-4 rounded-lg border-2 border-transparent hover:border-muji-beige transition-all"
+                onClick={() => setShowRecordedDetails(!showRecordedDetails)}
+              >
                 <div className="text-3xl font-light text-muji-dark mb-2">
                   {Math.round(totalMinutes / 60 * 10) / 10}시간
                 </div>
-                <div className="text-sm text-muji-mid">기록한 시간</div>
+                <div className="text-sm text-muji-mid flex items-center justify-center gap-1">
+                  기록한 시간
+                  <motion.span
+                    animate={{ rotate: showRecordedDetails ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </motion.span>
+                </div>
                 <div className="text-xs text-muji-mid mt-1">
                   ({((totalMinutes / 1440) * 100).toFixed(0)}%)
                 </div>
+
+                {/* 세부 정보 - 낭비한 시간 / 낭비되지 않은 시간 */}
+                <AnimatePresence>
+                  {showRecordedDetails && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="mt-4 pt-4 border-t border-muji-beige space-y-3"
+                    >
+                      <div>
+                        <div className="text-xl font-light text-[#d4a574]">
+                          {formatTime(wastedMinutes)}
+                        </div>
+                        <div className="text-xs text-muji-mid">낭비한 시간</div>
+                      </div>
+                      <div>
+                        <div className="text-xl font-light text-muji-dark">
+                          {formatTime(nonWastedMinutes)}
+                        </div>
+                        <div className="text-xs text-muji-mid">낭비되지 않은 시간</div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-              <div>
-                <div className="text-3xl font-light text-[#d4a574] mb-2">
-                  {formatTime(wastedMinutes)}
-                </div>
-                <div className="text-sm text-muji-mid">그 중 낭비한 시간</div>
-                <div className="text-xs text-muji-mid mt-1">
-                  ({((wastedMinutes / 1440) * 100).toFixed(0)}%)
-                </div>
-              </div>
-              <div>
-                <div className="text-3xl font-light text-muji-mid mb-2">
+
+              {/* 미지의 시간 */}
+              <div className="p-4">
+                <div className="text-3xl font-light text-muji-dark mb-2">
                   {Math.round(unaccountedMinutes / 60 * 10) / 10}시간
                 </div>
                 <div className="text-sm text-muji-mid">미지의 시간</div>
